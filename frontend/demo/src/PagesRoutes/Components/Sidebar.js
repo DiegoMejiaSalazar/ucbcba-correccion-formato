@@ -28,6 +28,8 @@ function Sidebar({ highlights, resetHighlights, basicFormatReport, removeHighlig
   var figuretableformatErrors = [];
   var englishwordsformatErrors = [];
   var biographyformatErrors = [];
+  var spellCheckingErrors = [];
+  var contextualErrors = []
   highlights.forEach(highlight => {
     if (highlight.type === "caratula") {
       coverformatErrors.push(highlight);
@@ -52,6 +54,12 @@ function Sidebar({ highlights, resetHighlights, basicFormatReport, removeHighlig
     }
     else if (highlight.type === "bibliografia") {
       biographyformatErrors.push(highlight);
+    }
+    else if (highlight.type === "ortografia") {
+      spellCheckingErrors.push(highlight);
+    }
+    else if (highlight.type === "contextual") {
+      contextualErrors.push(highlight);
     }
   });
 
@@ -146,6 +154,17 @@ function Sidebar({ highlights, resetHighlights, basicFormatReport, removeHighlig
         removeHighlight={removeHighlight}
       />
 
+      <Section
+        section="Ortografía"
+        formatErros={spellCheckingErrors}
+        removeHighlight={removeHighlight}
+      />
+
+      <Section
+        section="Contextual"
+        formatErros={contextualErrors}
+        removeHighlight={removeHighlight}
+      />
     </div>
   );
 }

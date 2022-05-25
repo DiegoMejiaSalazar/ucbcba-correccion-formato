@@ -98,6 +98,7 @@ class UploadFile extends Component {
                             <center>
                                 <h3 className="text-guide-1"> Revisa el formato de tu trabajo académico ¡aquí!</h3>
                                 <h4 className="text-guide-2"> Sube tu documento en formato PDF por favor</h4>
+                                <p> Para reportar errores en el sistema mandar un Whatsapp al 62747216 </p>
                             </center>
                         </div>
                     </div>

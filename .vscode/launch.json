@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-UcbCorreccionFormatoApplication<ucb-correccion-formato>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.ucbcba.joel.ucbcorreccionformato.UcbCorreccionFormatoApplication",
+            "projectName": "ucb-correccion-formato",
+            "args": ""
+        }
+    ]
+}
