@@ -102,9 +102,15 @@ public class FormatErrorController {
                                 .getBody();
                 List<FormatErrorResponse> result = new ArrayList<>();
                 response.get("errors").forEach(x -> {
-                        LinkedHashMap<String, Object> spellError = x;
-                        Comment comment = new Comment(
-                                        "No se pudo encontrar la palabra " + x.get("text") + " no quiso decir:", "");
+                        String errorDescription = "";
+                        if (x.get("type").toString() == "ortografia") {
+                                errorDescription = "No se pudo encontrar la palabra " + x.get("text")
+                                                + " no quiso decir:";
+                        } else {
+                                errorDescription = "La palabra " + x.get("text")
+                                                + " no concuerda con el contexto, no quiso decir: ";
+                        }
+                        Comment comment = new Comment(errorDescription, "");
                         Content content = new Content(x.get("suggestions").toString());
                         boolean error = true;
                         float x1 = Float.parseFloat(
