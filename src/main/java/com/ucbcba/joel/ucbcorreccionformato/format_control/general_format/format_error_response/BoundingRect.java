@@ -1,14 +1,14 @@
 package com.ucbcba.joel.ucbcorreccionformato.format_control.general_format.format_error_response;
 
 public class BoundingRect {
-    private float x1;
-    private float y1;
-    private float x2;
-    private float y2;
-    private float width;
-    private float height;
+    private double x1;
+    private double y1;
+    private double x2;
+    private double y2;
+    private double width;
+    private double height;
 
-    public BoundingRect(float x1, float y1, float x2, float y2, float width, float height) {
+    public BoundingRect(double x1, double y1, double x2, double y2, double width, double height) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -17,51 +17,51 @@ public class BoundingRect {
         this.height = height;
     }
 
-    public float getX1() {
+    public double getX1() {
         return x1;
     }
 
-    public void setX1(float x1) {
+    public void setX1(double x1) {
         this.x1 = x1;
     }
 
-    public float getY1() {
+    public double getY1() {
         return y1;
     }
 
-    public void setY1(float y1) {
+    public void setY1(double y1) {
         this.y1 = y1;
     }
 
-    public float getX2() {
+    public double getX2() {
         return x2;
     }
 
-    public void setX2(float x2) {
+    public void setX2(double x2) {
         this.x2 = x2;
     }
 
-    public float getY2() {
+    public double getY2() {
         return y2;
     }
 
-    public void setY2(float y2) {
+    public void setY2(double y2) {
         this.y2 = y2;
     }
 
-    public float getWidth() {
+    public double getWidth() {
         return width;
     }
 
-    public void setWidth(float width) {
+    public void setWidth(double width) {
         this.width = width;
     }
 
-    public float getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(float height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 }

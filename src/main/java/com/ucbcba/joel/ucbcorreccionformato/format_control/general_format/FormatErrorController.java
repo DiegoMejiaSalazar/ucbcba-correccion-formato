@@ -113,24 +113,16 @@ public class FormatErrorController {
                         Comment comment = new Comment(errorDescription, "");
                         Content content = new Content(x.get("suggestions").toString());
                         boolean error = true;
-                        float x1 = Float.parseFloat(
-                                        (((LinkedHashMap<String, LinkedHashMap<String, String>>) x.get("position")))
-                                                        .get("boundingRect").get("x1"));
-                        float y1 = Float.parseFloat(
-                                        (((LinkedHashMap<String, LinkedHashMap<String, String>>) x.get("position")))
-                                                        .get("boundingRect").get("y1"));
-                        float x2 = Float.parseFloat(
-                                        (((LinkedHashMap<String, LinkedHashMap<String, String>>) x.get("position")))
-                                                        .get("boundingRect").get("x2"));
-                        float y2 = Float.parseFloat(
-                                        (((LinkedHashMap<String, LinkedHashMap<String, String>>) x.get("position")))
-                                                        .get("boundingRect").get("y2"));
-                        float width = Float.parseFloat(
-                                        (((LinkedHashMap<String, LinkedHashMap<String, String>>) x.get("position")))
-                                                        .get("boundingRect").get("width"));
-                        float height = Float.parseFloat(
-                                        (((LinkedHashMap<String, LinkedHashMap<String, String>>) x.get("position")))
-                                                        .get("boundingRect").get("height"));
+                        LinkedHashMap<String, LinkedHashMap<String, Double>> positions = (LinkedHashMap<String, LinkedHashMap<String, Double>>) x.get("position");
+                        LinkedHashMap<String, Double> boundingrect = positions.get("boundingRect");
+                        double x1 = boundingrect.get("x1");
+                        double y1 = boundingrect.get("y1");
+                        double x2 = boundingrect.get("x2");
+                        double y2 = boundingrect.get("y2");
+                        // Integer width = (boundingrect.get("width").intValue());
+                        // int height = boundingrect.get("height").intValue();
+                        int width = 612;
+                        int height = 792;
                         List<BoundingRect> spellBoundingRectList = new ArrayList<>();
                         BoundingRect brect = new BoundingRect(x1, y1, x2, y2, width, height);
                         spellBoundingRectList.add(brect);
