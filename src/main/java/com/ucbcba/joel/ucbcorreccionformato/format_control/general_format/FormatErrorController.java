@@ -96,9 +96,7 @@ public class FormatErrorController {
                 MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
                 body.add("file", resource);
                 String serverUrl = "http://127.0.0.1:5000/spell-check";
-                HttpComponentsClientHttpRequestFactory client = new HttpComponentsClientHttpRequestFactory();
-                client.setConnectTimeout(900000);
-                RestTemplate restTemplate = new RestTemplate(client);
+                RestTemplate restTemplate = new RestTemplate();
                 HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity(body, headers);
                 SpellCheckResponse response = restTemplate
                                 .postForEntity(serverUrl, requestEntity, SpellCheckResponse.class)

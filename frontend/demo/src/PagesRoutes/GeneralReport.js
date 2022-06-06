@@ -79,7 +79,10 @@ class GeneralReport extends Component<Props, State> {
     document.body.style = 'background-image: none;';
     document.body.style = 'background: #717579;';
     await fetch(window["cfgApiBaseUrl"] + `/api/basicFormat/${encodeURI(this.props.match.params.name)}.pdf` + `${(this.props.location.search)}`, {
-      method: 'POST'
+      method: 'POST',
+      headers: {
+        'connection': 'keep-alive'
+      }
     }).then(
       response => {
         return response.json();
@@ -213,10 +216,10 @@ class GeneralReport extends Component<Props, State> {
                       comment={highlight.comment}
                     />
                   ) : (
-                      <AreaHighlight
-                        highlight={highlight}
-                      />
-                    );
+                    <AreaHighlight
+                      highlight={highlight}
+                    />
+                  );
 
                   return (
                     <Popup
