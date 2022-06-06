@@ -23,6 +23,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -95,7 +96,9 @@ public class FormatErrorController {
                 MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
                 body.add("file", resource);
                 String serverUrl = "http://127.0.0.1:5000/spell-check";
-                RestTemplate restTemplate = new RestTemplate();
+                HttpComponentsClientHttpRequestFactory client = new HttpComponentsClientHttpRequestFactory();
+                client.setConnectTimeout(900000);
+                RestTemplate restTemplate = new RestTemplate(client);
                 HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity(body, headers);
                 SpellCheckResponse response = restTemplate
                                 .postForEntity(serverUrl, requestEntity, SpellCheckResponse.class)
