@@ -25,6 +25,26 @@ public class EnglishWordsPageFormat implements PageFormatRule {
     private AtomicLong idHighlights;
     private Dictionary dictionary;
     private Diccionario diccionario;
+    private static final List<String> wordsToIgnore = List.of("homofonía",
+    "homógrafas",
+    "homófonas",
+    "Homófonas",
+    "heterógrafas",
+    "Heterógrafas",
+    "objetivables",
+    "homonía",
+    "weight",
+    "Rof",
+    "Softmax",
+    "ReLU",
+    "Sigmoide",
+    "sigmoide",
+    "retropropagación",
+    "Hunspell",
+    "Pyspellchecker",
+    "boundingrect",
+    "DeepAI",
+    "bias");
 
     public EnglishWordsPageFormat(PDDocument pdfdocument, AtomicLong idHighlights){
         this.pdfdocument = pdfdocument;
@@ -104,7 +124,7 @@ public class EnglishWordsPageFormat implements PageFormatRule {
         }
         String  result = builder.toString().replaceAll("[^\\w\\sáéíóúAÉÍÓÚÑñ]","");
         result = result.toLowerCase();
-        if (result.length() > 2 && dictionary.contains(result) && !diccionario.contains(result) && !isPluralSpanishWord(result)){
+        if (result.length() > 2 && dictionary.contains(result) && !diccionario.contains(result) && !isPluralSpanishWord(result) && !EnglishWordsPageFormat.wordsToIgnore.contains(result)){
             resp = true;
         }
         return resp;

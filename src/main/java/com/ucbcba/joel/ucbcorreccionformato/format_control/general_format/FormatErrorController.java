@@ -104,7 +104,7 @@ public class FormatErrorController {
                 List<FormatErrorResponse> result = new ArrayList<>();
                 response.get("errors").forEach(x -> {
                         String errorDescription = "";
-                        if (x.get("type").toString() == "ortografia") {
+                        if (x.get("type").equals("ortografia")) {
                                 errorDescription = "No se pudo encontrar la palabra " + x.get("text")
                                                 + " no quiso decir:";
                         } else {
