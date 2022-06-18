@@ -81,7 +81,7 @@ public class FormatErrorController {
                                         bibliographyStartPage));
                         formatErrors.addAll(formatErrorDetector.getBibliographyFormatErrors(bibliographyStartPage,
                                         bibliographyEndPage, bibliograhyType));
-                        formatErrors.addAll(getSpellCheckErrors(resource));
+                        formatErrors.addAll(getSpellCheckErrors(resource, bibliographyStartPage));
                         pdfdocument.close();
                 } catch (IOException e) {
                         logger.log(Level.SEVERE, "No se pudo analziar el archivo PDF", e);
@@ -89,18 +89,19 @@ public class FormatErrorController {
                 return formatErrors;
         }
 
-        private List<FormatErrorResponse> getSpellCheckErrors(Resource resource)
+        private List<FormatErrorResponse> getSpellCheckErrors(Resource resource, Integer bibliographyStart)
                         throws IOException, NumberFormatException {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.MULTIPART_FORM_DATA);
                 MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
                 body.add("file", resource);
-                String serverUrl = "http://127.0.0.1:5000/spell-check";
+                String serverUrl = "http://127.0.0.1:5000/spell-check?bibliographystart=" + bibliographyStart.toString();
                 RestTemplate restTemplate = new RestTemplate();
                 HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity(body, headers);
                 SpellCheckResponse response = restTemplate
                                 .postForEntity(serverUrl, requestEntity, SpellCheckResponse.class)
                                 .getBody();
+                
                 List<FormatErrorResponse> result = new ArrayList<>();
                 response.get("errors").forEach(x -> {
                         String errorDescription = "";

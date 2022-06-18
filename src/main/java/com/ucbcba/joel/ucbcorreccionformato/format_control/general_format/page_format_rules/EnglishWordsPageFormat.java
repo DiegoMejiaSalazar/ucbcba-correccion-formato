@@ -28,23 +28,23 @@ public class EnglishWordsPageFormat implements PageFormatRule {
     private static final List<String> wordsToIgnore = List.of("homofonía",
     "homógrafas",
     "homófonas",
-    "Homófonas",
     "heterógrafas",
-    "Heterógrafas",
+    "heterógrafas",
     "objetivables",
     "homonía",
     "weight",
     "Rof",
-    "Softmax",
-    "ReLU",
-    "Sigmoide",
+    "softmax",
+    "reLU",
     "sigmoide",
     "retropropagación",
     "Hunspell",
     "Pyspellchecker",
     "boundingrect",
     "DeepAI",
-    "bias");
+    "grafemas",
+    "homófonos"
+    );
 
     public EnglishWordsPageFormat(PDDocument pdfdocument, AtomicLong idHighlights){
         this.pdfdocument = pdfdocument;
