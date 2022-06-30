@@ -2,6 +2,8 @@ package com.ucbcba.joel.ucbcorreccionformato.format_control.general_format;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.ucbcba.joel.ucbcorreccionformato.format_control.general_format.format_error_response.BoundingRect;
 import com.ucbcba.joel.ucbcorreccionformato.format_control.general_format.format_error_response.Comment;
 import com.ucbcba.joel.ucbcorreccionformato.format_control.general_format.format_error_response.Content;
@@ -17,13 +20,19 @@ import com.ucbcba.joel.ucbcorreccionformato.format_control.general_format.format
 import com.ucbcba.joel.ucbcorreccionformato.format_control.general_format.format_error_response.SpellCheckResponse;
 import com.ucbcba.joel.ucbcorreccionformato.upload_download_file.service.FileStorageService;
 
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +40,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
 
 @RestController
 public class FormatErrorController {
@@ -57,6 +67,8 @@ public class FormatErrorController {
                 Resource resource = fileStorageService.loadFileAsResource(fileName);
                 Logger logger = Logger.getLogger(
                                 "com.ucbcba.joel.ucbcorreccionformato.control_format_rules.general_format.FormatErrorController");
+                System.out.println("==================================================CALLING=========================");
+                logger.warning("CALLING METHOD !!!!!");
                 try {
                         String dirPdfFile = resource.getFile().getAbsolutePath();
                         PDDocument pdfdocument = PDDocument.load(new File(dirPdfFile));
@@ -81,27 +93,32 @@ public class FormatErrorController {
                                         bibliographyStartPage));
                         formatErrors.addAll(formatErrorDetector.getBibliographyFormatErrors(bibliographyStartPage,
                                         bibliographyEndPage, bibliograhyType));
-                        formatErrors.addAll(getSpellCheckErrors(resource, bibliographyStartPage));
+                        formatErrors.addAll(getSpellCheckErrors(resource, bibliographyStartPage, generalIndexEndPage, figureIndexEndPage, tableIndexEndPage));
                         pdfdocument.close();
                 } catch (IOException e) {
+                        logger.log(Level.SEVERE, "No se pudo analziar el archivo PDF", e);
+                } catch (ClassNotFoundException e) {
                         logger.log(Level.SEVERE, "No se pudo analziar el archivo PDF", e);
                 }
                 return formatErrors;
         }
 
-        private List<FormatErrorResponse> getSpellCheckErrors(Resource resource, Integer bibliographyStart)
-                        throws IOException, NumberFormatException {
+        private List<FormatErrorResponse> getSpellCheckErrors(Resource resource, Integer bibliographyStart,Integer generalIndexEndPage, Integer figureIndexEndPage, Integer tableIndexEndPage)
+                        throws IOException, NumberFormatException, ClassNotFoundException {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-                MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+                MultiValueMap<String, Object> body = new LinkedMultiValueMap();
                 body.add("file", resource);
-                String serverUrl = "http://127.0.0.1:5000/spell-check?bibliographystart=" + bibliographyStart.toString();
-                RestTemplate restTemplate = new RestTemplate();
-                HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity(body, headers);
+                String serverUrl = "http://127.0.0.1:5000/spell-check?bibliographystart=" + bibliographyStart.toString() + "&figureIndexEndPage=" + figureIndexEndPage.toString() + "&generalIndexEndPage=" + generalIndexEndPage.toString() + "&tableIndexEndPage=" + tableIndexEndPage.toString();
+                SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+                factory.setConnectTimeout(0);
+                factory.setReadTimeout(0);
+                factory.setBufferRequestBody(false);
+                RestTemplate restTemplate = new RestTemplate(factory);
+                HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<MultiValueMap<String, Object>>(body, headers);
                 SpellCheckResponse response = restTemplate
                                 .postForEntity(serverUrl, requestEntity, SpellCheckResponse.class)
                                 .getBody();
-                
                 List<FormatErrorResponse> result = new ArrayList<>();
                 response.get("errors").forEach(x -> {
                         String errorDescription = "";
@@ -121,8 +138,6 @@ public class FormatErrorController {
                         double y1 = boundingrect.get("y1");
                         double x2 = boundingrect.get("x2");
                         double y2 = boundingrect.get("y2");
-                        // Integer width = (boundingrect.get("width").intValue());
-                        // int height = boundingrect.get("height").intValue();
                         int width = 612;
                         int height = 792;
                         List<BoundingRect> spellBoundingRectList = new ArrayList<>();

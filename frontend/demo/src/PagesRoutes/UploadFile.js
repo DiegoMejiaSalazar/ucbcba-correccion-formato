@@ -65,6 +65,8 @@ class UploadFile extends Component {
     }
 
     render() {
+        const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)
+        console.warn(isChrome)
         var messageCode = null;
         if (this.state.status !== '') {
             messageCode = (<div className="col">
@@ -98,7 +100,7 @@ class UploadFile extends Component {
                             <center>
                                 <h3 className="text-guide-1"> Revisa el formato de tu trabajo académico ¡aquí!</h3>
                                 <h4 className="text-guide-2"> Sube tu documento en formato PDF por favor</h4>
-                                <p> Para reportar errores en el sistema mandar un Whatsapp al 62747216 </p>
+                                {isChrome === false && <div className='alert alert-danger' role='alert'> SE RECOMIENDA USAR <a href="https://www.google.com/intl/es/chrome/?brand=YTUH&gclid=EAIaIQobChMImqun8Z3W-AIVs5BoCR3lJwLiEAAYASAAEgLmAPD_BwE&gclsrc=aw.ds" className='alert-link'>GOOGLE CHROME</a></div>}
                             </center>
                         </div>
                     </div>
