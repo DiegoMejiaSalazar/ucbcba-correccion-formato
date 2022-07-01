@@ -65,7 +65,8 @@ class UploadFile extends Component {
     }
 
     render() {
-        const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)
+        var sBrowser, sUsrAg = navigator.userAgent;
+        const isChrome = sUsrAg.indexOf('Chrome') > -1
         console.warn(isChrome)
         var messageCode = null;
         if (this.state.status !== '') {
