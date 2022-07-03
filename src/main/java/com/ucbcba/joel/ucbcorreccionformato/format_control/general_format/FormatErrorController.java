@@ -75,7 +75,7 @@ public class FormatErrorController {
                         int contentFirstPage = getContentFirstPage(coverPage, generalIndexEndPage, figureIndexEndPage,
                                         tableIndexEndPage);
                         FormatErrorDetector formatErrorDetector = new FormatErrorDetector(pdfdocument, idHighlights);
-                        // formatErrors.addAll(formatErrorDetector.getCoverPageFormatErrors(coverPage));
+                        formatErrors.addAll(formatErrorDetector.getCoverPageFormatErrors(coverPage));
                         formatErrors.addAll(
                                         formatErrorDetector.getGeneralIndexFormatErrors(generalIndexStartPage,
                                                         generalIndexEndPage));
@@ -93,18 +93,16 @@ public class FormatErrorController {
                                         bibliographyStartPage));
                         formatErrors.addAll(formatErrorDetector.getBibliographyFormatErrors(bibliographyStartPage,
                                         bibliographyEndPage, bibliograhyType));
-                        formatErrors.addAll(getSpellCheckErrors(resource, bibliographyStartPage, generalIndexEndPage, figureIndexEndPage, tableIndexEndPage));
+                        // formatErrors.addAll(getSpellCheckErrors(resource, bibliographyStartPage, generalIndexEndPage, figureIndexEndPage, tableIndexEndPage));
                         pdfdocument.close();
                 } catch (IOException e) {
-                        logger.log(Level.SEVERE, "No se pudo analziar el archivo PDF", e);
-                } catch (ClassNotFoundException e) {
                         logger.log(Level.SEVERE, "No se pudo analziar el archivo PDF", e);
                 }
                 return formatErrors;
         }
 
         private List<FormatErrorResponse> getSpellCheckErrors(Resource resource, Integer bibliographyStart,Integer generalIndexEndPage, Integer figureIndexEndPage, Integer tableIndexEndPage)
-                        throws IOException, NumberFormatException, ClassNotFoundException {
+                        throws IOException, NumberFormatException {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.MULTIPART_FORM_DATA);
                 MultiValueMap<String, Object> body = new LinkedMultiValueMap();

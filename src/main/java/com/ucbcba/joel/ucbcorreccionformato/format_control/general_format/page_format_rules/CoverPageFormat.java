@@ -40,24 +40,13 @@ public class CoverPageFormat implements PageFormatRule {
         GetterWordLines getterWordLines = new GetterWordLines(pdfdocument);
         List<WordLine> wordsLines = getterWordLines.getCoverPageElements(page);
         int line=0;
-        controlInstitutionName(wordsLines, formatErrors, line, pageWidth, pageHeight, page);
-        line++;
-        controlRegionalAcademic(wordsLines, formatErrors, line, pageWidth, pageHeight, page);
-        line++;
-        controlDepartmentCareerAuthor(wordsLines, formatErrors, line, pageWidth, pageHeight, page);
-        line++;
-        controlDepartmentCareerAuthor(wordsLines, formatErrors, line, pageWidth, pageHeight, page);
-        line++;
-
         controlImageUcb(formatErrors, page, pageWidth, pageHeight);
-
+        line++;
         controlTittleWork(wordsLines, formatErrors, line, pageWidth, pageHeight, page);
         line++;
         controlTypeWork(wordsLines, formatErrors, line, pageWidth, pageHeight, page);
         line++;
-        controlDepartmentCareerAuthor(wordsLines, formatErrors, line, pageWidth, pageHeight, page);
-        line++;
-        controlCountryDate(wordsLines, formatErrors, line, pageWidth, pageHeight, page);
+        controlStudentName(wordsLines, formatErrors, line, pageWidth, pageHeight, page);
         line++;
         controlCountryDate(wordsLines, formatErrors, line, pageWidth, pageHeight, page);
         WordLine numeration = getterWordLines.getAnyPageNumeration(page);
@@ -81,7 +70,19 @@ public class CoverPageFormat implements PageFormatRule {
         }
     }
 
+    private void controlStudentName(List<WordLine> wordsLines, List<FormatErrorResponse> formatErrors, int line, float pageWidth, float pageHeight, int page) {
+        if(line < wordsLines.size()){
+            Format regionalAcademicUnit = new CoverFormat( 14, CENTRADO, pageWidth,true, false, false,true);
+            List<String> formatErrorscomments = regionalAcademicUnit.getFormatErrorComments(wordsLines.get(line));
+            reportFormatErrors(formatErrorscomments, wordsLines.get(line), formatErrors, pageWidth, pageHeight, page);
+        }
+    }
+
     private void controlDepartmentCareerAuthor(List<WordLine> wordsLines, List<FormatErrorResponse> formatErrors, int line, float pageWidth, float pageHeight, int page) {
+        System.out.println("controlDepartmentCareerAuthor");
+        for(WordLine w: wordsLines) {
+            w.getLines().forEach(t -> {System.out.println(t.toString());});
+        }
         if(line < wordsLines.size()){
             Format department = new CoverFormat(14, CENTRADO,pageWidth, true, false, false,true);
             List<String> formatErrorscomments = department.getFormatErrorComments(wordsLines.get(line));
@@ -90,6 +91,10 @@ public class CoverPageFormat implements PageFormatRule {
     }
 
     private void controlTittleWork(List<WordLine> wordsLines, List<FormatErrorResponse> formatErrors, int line, float pageWidth, float pageHeight, int page) {
+        System.out.println("CONTROL TITTLE");
+        for(WordLine w: wordsLines) {
+            w.getLines().forEach(t -> {System.out.println(t.toString());});
+        }
         if(line < wordsLines.size()){
             Format titleOfTheWork = new CoverFormat(16, CENTRADO, pageWidth,true, false, false,false);
             List<String> formatErrorscomments = titleOfTheWork.getFormatErrorComments(wordsLines.get(line));
@@ -103,7 +108,7 @@ public class CoverPageFormat implements PageFormatRule {
 
     private void controlTypeWork(List<WordLine> wordsLines, List<FormatErrorResponse> formatErrors, int line, float pageWidth, float pageHeight, int page) {
         if(line < wordsLines.size()){
-            Format typeOfTheWork = new CoverFormat( 12, "Derecho", pageWidth,false, true, false,true);
+            Format typeOfTheWork = new CoverFormat( 12, CENTRADO, pageWidth,false, true, false,true);
             List<String> formatErrorscomments = typeOfTheWork.getFormatErrorComments(wordsLines.get(line));
             reportFormatErrors(formatErrorscomments, wordsLines.get(line), formatErrors, pageWidth, pageHeight, page);
         }
@@ -143,8 +148,8 @@ public class CoverPageFormat implements PageFormatRule {
         for (PdfImage image : pdfImages) {
             List<String> commentsFigureError = new ArrayList<>();
             image.setCorrectCoordinates(pageHeight);
-            if ((image.getWidthDisplayed() > 133) || (image.getWidthDisplayed() < 123) || (image.getHeightDisplayed() > 175) || (image.getHeightDisplayed() < 165)) {
-                commentsFigureError.add("Por favor verificar que el logo tenga 6cm de alto y 4,5 cm de ancho");
+            if ((image.getWidthDisplayed() > 341) || (image.getWidthDisplayed() < 330) || (image.getHeightDisplayed() > 142) || (image.getHeightDisplayed() < 135)) {
+                commentsFigureError.add("Por favor verificar que el logo tenga 5 cm de alto y 12 de ancho");
             }
             reportFigureErrors(formatErrors, image, commentsFigureError, pageWidth, pageHeight, page);
         }
