@@ -108,7 +108,7 @@ class UploadFile extends Component {
                     <div className="row justify-content-end">
                         <div className="col-4">
                             <div className="left">
-                                <a target="_blank" href="http://localhost:8080/api/guiaucb"><FontAwesomeIcon icon={faDownload} /> Descargue la guia
+                                <a href="https://cba.ucb.edu.bo/wp-content/uploads/2019/12/GUIAUCB2020.pdf" download><FontAwesomeIcon icon={faDownload} /> Descargue la guia
                                 </a>
                             </div>
                         </div>
