@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,24 +22,25 @@ import com.ucbcba.joel.ucbcorreccionformato.format_control.general_format.format
 import com.ucbcba.joel.ucbcorreccionformato.format_control.general_format.format_error_response.SpellCheckResponse;
 import com.ucbcba.joel.ucbcorreccionformato.upload_download_file.service.FileStorageService;
 
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -48,6 +51,31 @@ public class FormatErrorController {
         private final AtomicLong idHighlights = new AtomicLong();
         @Autowired
         private FileStorageService fileStorageService;
+
+        @GetMapping(value="/api/ejemplo", produces=MediaType.APPLICATION_OCTET_STREAM_VALUE)
+        public ResponseEntity<byte[]> download() throws IOException {
+                try {
+ 
+                        File file = ResourceUtils.getFile("paradescargar.docx");
+                 
+                        byte[] contents = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
+                 
+                        HttpHeaders headers = new HttpHeaders();
+                        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+                        headers.setContentDisposition(ContentDisposition.builder("inline").name("paradescargar.docx").build());
+                 
+                        return new ResponseEntity<>(contents, headers, HttpStatus.OK);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                    }
+        }
+
+        @GetMapping(value="/api/guiaucb", produces=MediaType.APPLICATION_OCTET_STREAM_VALUE)
+        public @ResponseBody byte[] getPdf() throws IOException {
+                InputStream in = getClass().getResourceAsStream("./guiaucb.pdf");
+                return IOUtils.toByteArray(in);
+        } 
 
         @PostMapping("/api/hightlight/errors/{fileName:.+}")
         public List<FormatErrorResponse> getHightlightErrors(@PathVariable String fileName,

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import "../style/UploadFile.css";
 import ucbImage from '../images/ucbcba.png';
-import ucbLogo from '../images/UCBLogo.png';
-import ucbGuide from '../images/guia.png';
 import coverGif from '../images/caratula.gif';
 import bibliographyGif from '../images/bibliografia.gif';
 import warningGif from '../images/advertencias.png';
+import ucblogo from '../images/ucblogo.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
@@ -108,8 +108,7 @@ class UploadFile extends Component {
                     <div className="row justify-content-end">
                         <div className="col-4">
                             <div className="left">
-                                <a target="_blank" href="https://siaa.ucbcba.edu.bo/siaa2/Documentos/Modelos/GUIAUCBPTA2013.pdf">Consulte la guía ¡aquí!
-                                    <img className="guiaImage" align="left" src={ucbGuide} />
+                                <a target="_blank" href="http://localhost:8080/api/guiaucb"><FontAwesomeIcon icon={faDownload} /> Descargue la guia
                                 </a>
                             </div>
                         </div>
@@ -125,8 +124,7 @@ class UploadFile extends Component {
                         </div>
                         <div className="col-4">
                             <div className="right">
-                                <a href={window["cfgApiBaseUrl"] + "/api/downloadFile/UCBLogo.png"}>Descargue el logo UCB ¡aquí!
-                                    <img className="UcbImage" align="right" src={ucbLogo} />
+                                <a href={ucblogo} download><FontAwesomeIcon icon={faDownload} /> Descargue el logo
                                 </a>
                             </div>
                         </div>
