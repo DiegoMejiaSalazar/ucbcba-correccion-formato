@@ -121,7 +121,7 @@ public class FormatErrorController {
                                         bibliographyStartPage));
                         formatErrors.addAll(formatErrorDetector.getBibliographyFormatErrors(bibliographyStartPage,
                                         bibliographyEndPage, bibliograhyType));
-                        // formatErrors.addAll(getSpellCheckErrors(resource, bibliographyStartPage, generalIndexEndPage, figureIndexEndPage, tableIndexEndPage));
+                        formatErrors.addAll(getSpellCheckErrors(resource, bibliographyStartPage, generalIndexEndPage, figureIndexEndPage, tableIndexEndPage));
                         pdfdocument.close();
                 } catch (IOException e) {
                         logger.log(Level.SEVERE, "No se pudo analziar el archivo PDF", e);
