@@ -4,7 +4,7 @@ import ucbImage from '../images/ucbcba.png';
 import coverGif from '../images/caratula.gif';
 import bibliographyGif from '../images/bibliografia.gif';
 import warningGif from '../images/advertencias.png';
-import ucblogo from '../images/ucblogo.png'
+import ucblogo from '../images/ucblogo.jpg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
